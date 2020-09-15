@@ -1,7 +1,6 @@
 package com.charakhovich.servlet.dao.impl;
 
 import com.charakhovich.servlet.pool.ConnectionPool;
-import com.charakhovich.servlet.pool.ConnectorCreator;
 import com.charakhovich.servlet.dao.DaoException;
 import com.charakhovich.servlet.dao.UserDao;
 import com.charakhovich.servlet.entity.User;
