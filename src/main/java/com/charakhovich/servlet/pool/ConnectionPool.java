@@ -73,10 +73,10 @@ public class ConnectionPool {
                 freeConnections.put(proxyConnection);
                 flag = true;
             } else {
-                throw new DaoException("Strange connection, ");
+                throw new DaoException("!!!!!!!");
             }
         } else {
-            throw new DaoException("Strange connection. It is not ");
+            throw new DaoException("!!!!! ");
          //  logger.log(Level.WARN, "This connection is not connection of this pool");
         }
         return flag;
