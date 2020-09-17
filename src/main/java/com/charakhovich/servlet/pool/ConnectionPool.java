@@ -1,7 +1,6 @@
 package com.charakhovich.servlet.pool;
 
 import com.charakhovich.servlet.dao.DaoException;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -62,35 +61,22 @@ public class ConnectionPool {
     public Connection getConnection() throws InterruptedException {
         ProxyConnection connection = null;
         connection = freeConnections.take();
-        busyConnections.offer(connection);
+        busyConnections.put(connection);
         return connection;
     }
-    /*    try {
-            if (freeConnections.isEmpty() && (
-                    (freeConnections.size() + busyConnections.size()) < connectorCreator.getPoolSizeMax())) {
-                connection = connectorCreator.createConnection();
-                poolSize++;
-                busyConnections.offer(connection);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return connection;
-    }*/
 
-    public boolean returnConnection(Connection connection) throws DaoException {
+    public boolean returnConnection(Connection connection) throws DaoException, InterruptedException {
         boolean flag = false;
         if (connection instanceof ProxyConnection) {
             ProxyConnection proxyConnection = (ProxyConnection) connection;
-            if (busyConnections.contains(connection)) {
-                busyConnections.remove(proxyConnection);
-                freeConnections.offer(proxyConnection);
+            if ( busyConnections.remove(proxyConnection)) {
+                freeConnections.put(proxyConnection);
                 flag = true;
             } else {
-                throw new DaoException("Strange connection");
+                throw new DaoException("Strange connection, ");
             }
         } else {
-            throw new DaoException("Strange connection");
+            throw new DaoException("Strange connection. It is not ");
          //  logger.log(Level.WARN, "This connection is not connection of this pool");
         }
         return flag;
