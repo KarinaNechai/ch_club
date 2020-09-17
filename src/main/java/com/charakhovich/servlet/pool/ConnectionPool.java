@@ -136,7 +136,7 @@ public class ConnectionPool {
                     freeConnections.offer(addProxyConnection);
                 }
                 lock.unlock();
-                TimeUnit.MINUTES.sleep(02);
+                TimeUnit.SECONDS.sleep(1000);
             } catch (SQLException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
