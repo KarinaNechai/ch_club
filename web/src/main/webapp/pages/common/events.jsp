@@ -20,9 +20,12 @@
 <main class="main">
 </main>
 <div id="method">
+<div class="row" style="text-align:center; background:#f3f3f3;"
+ <h2>Наши мероприятия </h2>
+        <br/>
+        <div>
       <div class="row" style="text-align:center; background:#f3f3f3;">
-        <h2>Наши мероприятия </h2>
-        <hr />
+
          <c:forEach items="${listEvent}" var="event">
         <ul style="list-style:none; margin:15px; padding:10px; box-shadow:0 0 5px #aaa;
 background: #FFF; border-radius: 3px;">

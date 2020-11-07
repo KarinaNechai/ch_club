@@ -16,12 +16,12 @@ import java.util.List;
 public class EventDaoImpl extends AbstractDao<Event> implements EventDao {
     private static final Logger Logger= LogManager.getLogger(EventDaoImpl.class);
     private static final String SELECT_ACTUAL_EVENTS =
-            "select eventid,typeevent,name,description,picture,counttickets,actflag,modifydate,short_description from ch_event " +
+            "select event_id,typeevent,name,description,picture,counttickets,actflag,modifydate,short_description from ch_event " +
                     "where actflag=? order by modifydate desc";
     private static final String INSERT_EVENT =
                    "INSERT INTO ch_event (typeevent,name,description,picture,counttickets,actflag,modifydate)  VALUES(?,?,?,?,?,?,?)";
     private static final String SELECT_EVENT_BY_ID =
-            "select eventid,typeevent,name,description,short_description,actflag from ch_event where eventid=?";
+            "select event_id,typeevent,name,description,short_description,actflag from ch_event where event_id=?";
 
     @Override
     public List<Event> findAll() throws DaoException {
@@ -37,9 +37,10 @@ public class EventDaoImpl extends AbstractDao<Event> implements EventDao {
                 event.setEventId(resultSet.getInt(TableColumnName.EVENT_DAO_ID));
                 event.setEventType(EventType.valueOf(resultSet.getString(TableColumnName.EVENT_DAO_TYPE_EVENT)));
                 event.setName(resultSet.getString(TableColumnName.EVENT_DAO_NAME));
-                Blob blob=resultSet.getBlob(TableColumnName.EVENT_DAO_DESCRIPTION);
+                String description=resultSet.getString(TableColumnName.EVENT_DAO_DESCRIPTION);
+              /*  Blob blob=resultSet.getBlob(TableColumnName.EVENT_DAO_DESCRIPTION);
                 byte[] bdata = blob.getBytes(1, (int) blob.length());
-                String description = new String(bdata);
+                String description = new String(bdata);*/
                 event.setDescription(description);
                 event.setNamePicture(resultSet.getString(TableColumnName.EVENT_DAO_PICTURE));
                 event.setCountTickets(resultSet.getInt(TableColumnName.EVENT_DAO_COUNT_TICKETS));
@@ -47,14 +48,10 @@ public class EventDaoImpl extends AbstractDao<Event> implements EventDao {
                 LocalDateTime localDateTime=t.toLocalDateTime();
                 event.setModifyDate(localDateTime);
                 event.setShortDescription(resultSet.getString(TableColumnName.EVENT_DAO_SHORT_DESCRIPTION));
-               // myJavaSqlDate
-              //  LocalDateTime localDate = myJavaSqlDate.toLocalDate();
-             /*   SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-                String str= resultSet.getString("modifydate");
-                LocalDateTime l=LocalDateTime.parse((CharSequence) str, DateTimeFormatter.ofPattern ("dd.MM.yyyy HH:mm:ss"));
-               event.setModifyDate(l);
-                */ events.add(event);
+                events.add(event);
             }
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -80,12 +77,9 @@ public class EventDaoImpl extends AbstractDao<Event> implements EventDao {
                 byte[] bdata = blob.getBytes(1, (int) blob.length());
                 String description = new String(bdata);
                 event.setDescription(description);
-  /*              event.setNamePicture(resultSet.getString(TableColumnName.EVENT_DAO_PICTURE));
-                event.setCountTickets(resultSet.getInt(TableColumnName.EVENT_DAO_COUNT_TICKETS));
-                Timestamp t=resultSet.getTimestamp(TableColumnName.EVENT_DAO_MODIFY_DATE);
-                LocalDateTime localDateTime=t.toLocalDateTime();
-                event.setModifyDate(localDateTime);*/
                 event.setShortDescription(resultSet.getString(TableColumnName.EVENT_DAO_SHORT_DESCRIPTION));
+                resultSet.close();
+                statement.close();
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -111,7 +105,6 @@ public class EventDaoImpl extends AbstractDao<Event> implements EventDao {
         Connection connection = this.connection;
         PreparedStatement statement = null;
         try {
-            //typeevent,name,description,picture,counttickets,actflag,modifydate
             statement = connection.prepareStatement(INSERT_EVENT);
             statement.setString(1, entity.getEventType().toString());
             statement.setString(2, entity.getName());
@@ -120,7 +113,9 @@ public class EventDaoImpl extends AbstractDao<Event> implements EventDao {
             statement.setString(5,String.valueOf(entity.getCountTickets()));
             statement.setString(6,"1");
             int result = statement.executeUpdate();
+            statement.close();
             return result==1?true:false;
+
             }
         catch (SQLException e) {
             throw new DaoException(e);

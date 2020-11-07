@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+ <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="message"/>
 <!doctype html>
@@ -23,12 +24,25 @@
               <img src="images/logo.png">
           </div>
           <div id="contacts" style="float:right;">
+          <i>
+           <div class="form-group" style="float:right;">
+                <form  action="${pageContext.request.contextPath}/controller" method="post">
+                    <input type="hidden" name="command" value ="change_locale">
+                        <select class="form-control" id="locale"  name ="locale" onchange="submit();">
+                            <option value="RU">RU <img src="images/ru.gif"></option>
+                            <option value="EN">EN<img src="images/us.gif "></option>
+                        </select>
+                </form>
+            </div>
+            </i>
               <i class="fa fa-mobile fa-lg"></i> +375-29-111-11-11 |
               <i class="fa fa-envelope fa-lg"></i> info@testmail.ru
               <i class="fa fa-facebook-square fa-2x" style="margin-left:10px; color: blue;"></i>
           </div>
           <div class="clearfix"></div>
+
         </div>
+         <ctg:user-info/>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
@@ -37,7 +51,7 @@
               <a class="navbar-brand" href="#">Hidden brand</a>
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                   <li class="nav-item active">
-                     <a class="nav-link" href="controller?command=events"> Мероприятия</a>
+                        <a class="nav-link" href="controller?command=events"> Мероприятия</a>
                   </li>
                   <li class="nav-item">
                      <a class="nav-link" href="controller?command=event_add"> Мероприятия++</a>
@@ -46,43 +60,29 @@
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                   </li>
                 </ul>
-
-                 <form class="form-inline" action="${pageContext.request.contextPath}/controller" method="post">
                   <c:choose>
                         <c:when test="${not empty authUser}">
-                                <div class="form-group">
-                                <label >${authUser.fullName()}</label>
-                                <label >role: ${authUser.getRole()}</label>
-
-                                <form  action="${pageContext.request.contextPath}/controller" method="post">
-                                 <button type="submit" class="btn btn-danger" >
-                                                                 <fmt:message key="main.button.logout"/>
-                                                                    </button>
+                            <form  action="${pageContext.request.contextPath}/controller" method="post">
+                                <button type="submit" class="btn btn-danger" >
+                                    <fmt:message key="main.button.logout"/>
+                                </button>
                                 <input type="hidden" name="command" value ="logout">
-                                                         </form>
+                            </form>
                                 </div>
                         </c:when>
                         <c:otherwise>
+                        <form class="form-inline" action="${pageContext.request.contextPath}/controller" method="post">
                             <input type="hidden" name="command" value ="login"/>
                                 <div class="form-group">
                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal_login">
                                         <fmt:message key="main.button.sign.in"/>
                                     </button>
                                 </div>
+                        </form>
                         </c:otherwise>
                   </c:choose>
-                  </form>
-                  </br>
-                  <div class="form-group">
-                  <form  action="${pageContext.request.contextPath}/controller" method="post">
-                   <input type="hidden" name="command" value ="locale">
-                    <select class="form-control" id="sel1"  name ="loc" onchange="submit();">
-                      <option value="RU">RU <img src="images/ru.gif"></option>
-                      <option value="EN">EN<img src="images/us.gif "></option>
-                    </select>
-                    </form>
-                  </div>
 
+                  </br>
             </div>
         </nav>
 
@@ -111,7 +111,6 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <!-- содержимое -->
             <form class="form" action="${pageContext.request.contextPath}/controller" method="post">
             <div class="modal-body">
@@ -128,15 +127,15 @@
                                 <input type="password" class="form-control" id="password" name="password"
                                     data-parsley-length="[8, 15]"
                                     data-parsley-group="block-1"
-                                    type="text"/>>
+                                    type="text"/>
                         </div>
                        </div>
             </div>
             <!-- подвал -->
             <div class="modal-footer">
-                <input class="btn btn-default validate" type="submit">
-                <button type="button" class="btn btn-secondary" >
-                    Зарегистрироваться
+          <!--      <input class="btn btn-default validate" type="submit" > -->
+                <button type="submit" class="btn btn-danger" >
+                   <fmt:message key="button.send"/>
                 </button>
             </div>
            </form>

@@ -3,6 +3,6 @@
 <c:set var="language" value="en" scope="session"/>
 <html>
 <body>
-<jsp:forward page="pages/login1.jsp"/>
+<jsp:forward page="pages/main.jsp"/>
 </body>
 </html>

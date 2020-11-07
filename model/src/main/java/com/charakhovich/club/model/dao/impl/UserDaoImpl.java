@@ -17,9 +17,9 @@ import java.util.List;
 
 public class UserDaoImpl extends AbstractDao<User> implements UserDao {
     private static final String SELECT_LOGIN_PASSWORD =
-            "SELECT userid, login, password FROM ch_user where login=?";
+            "SELECT user_id, login, password FROM ch_user where login=?";
     private static final String SELECT_USER_BY_LOGIN =
-            "SELECT userid, login,firstname,lastname,role, actfl FROM ch_user where actfl=? and login=? ";
+            "SELECT user_id, login,firstname,lastname,role, actfl FROM ch_user where actfl=? and login=? ";
     private static final String INSERT_USER = "INSERT INTO ch_user (login, email, userpassword," +
             " usersurname, userfirstname,userphone,userrole) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -44,6 +44,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
                 user.setRole(Role.valueOf(resultSet.getString(TableColumnName.USER_DAO_ROLE)));
                 user.setActual(resultSet.getBoolean(TableColumnName.EVENT_DAO_ACTFL));
             }
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -67,6 +69,8 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
                 user.setLogin(resultSet.getString(TableColumnName.USER_DAO_LOGIN));
                 tempPassword = resultSet.getString(TableColumnName.USER_DAO_PASSWORD);
             }
+            resultSet.close();
+            statement.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -134,6 +138,7 @@ public class UserDaoImpl extends AbstractDao<User> implements UserDao {
             if (statement.executeUpdate() == 1) {
                 flag = true;
             }
+            statement.close();
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {

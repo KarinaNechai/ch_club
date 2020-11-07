@@ -3,7 +3,9 @@ package com.charakhovich.club.web.command;
 import com.charakhovich.club.web.command.impl.*;
 
 public enum CommandType {
-    LOCALE {{this.command = new LocaleCommand();
+    ADD_MESSAGE{{this.command = new AddMessageCommand();
+    }},
+    CHANGE_LOCALE {{this.command = new LocaleCommand();
     }},
     EVENT_ADD {{this.command = new EventAddCommand();
     }},
@@ -20,7 +22,9 @@ public enum CommandType {
     }},
     EMPTY {{
         this.command = new EmptyCommand();
-    }}/*,
+    }},
+    PAGINATION{{this.command = new PaginationCommand();
+    }},/*,
  /*   REFRESH_PAGE{{
         this.command = new RefreshPageCommand();
     }

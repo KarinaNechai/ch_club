@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+ <%@ taglib prefix="ctg" uri="/WEB-INF/tld/custom.tld" %>
 <fmt:setLocale value="${locale}" scope="session"/>
 <fmt:setBundle basename="message"/>
 <html>
@@ -13,8 +14,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
    <link href="http://bootstrapformhelpers.com/assets/css/bootstrap-formhelpers.min.css" rel="stylesheet" media="screen">
    <script src="http://bootstrapformhelpers.com/assets/js/bootstrap-formhelpers.min.js"></script>
+
 </head>
+<style>
+     <%@include file="style.css" %>
+ </style>
 <body>
+
 <c:import url="common/header.jsp"/>
 <!-- MAIN -->
 <main class="main">
@@ -50,14 +56,13 @@
               </div>
             </div>
             <div class="col-5" id="event_data">
-
                 <br/>
                 <p style="overflow:auto; width: 500px; height:300px;">${eventView.getDescription()}
                 </p>
-
                   <br/>
+        <!-- Comments  -->
                <footer>
-               <button type="submit" class="btn btn-lg btn-block btn-outline-primary"  name="edit" value="${event.getEventId()}"><fmt:message key="button.edit"/></button>
+               <button type="submit" class="btn btn-lg btn-block btn-outline-primary"  name="edit" value="${eventView.getEventId()}"><fmt:message key="button.edit"/></button>
                 </footer>
         </div>
         </div>
@@ -65,6 +70,65 @@
     </div>
   </div>
  </form>
+ <c:forEach items="${listMessages}" var="message">
+ <div class="container_mes">
+        <img src="/w3images/bandmember.jpg" alt="Avatar" style="width:90px">
+        <p><span>${message.getUserId()} Chris Fox.</span> CEO at Mighty Schools.</p>
+        <p>${message.getText()}.</p>
+    </div>
+          </c:forEach>
+<div>
+<form action="${pageContext.request.contextPath}/controller" method="get">
+<input type="hidden" name="command" value ="edit_view">
+<table>
+        <tr>
+        <ul class="pagination">
+        <c:if test="${numberPage != 1}">
+        <li>
+        <a href="${pageContext.request.contextPath}/controller?command=pagination&page=${numberPage - 1}">
+        <fmt:message key="page.button.previous"/>
+        </a>
+        </li>
+        </c:if>
+        <c:forEach begin="1" end="${countPages}" var="i">
+        <c:choose>
+        <c:when test="${numberPage eq i}">
+        <li>
+        <a class="active" href="${pageContext.request.contextPath}/controller?command=pagination&page=${i}">${i}</a>
+        </li>
+        </c:when>
+        <c:otherwise>
+        <li>
+        <a href="${pageContext.request.contextPath}/controller?command=pagination&page=${i}">${i}
+        </a>
+        </li>
+        </c:otherwise>
+        </c:choose>
+        </c:forEach>
+        <c:if test="${numberPage lt countPages}">
+        <li>
+        <a href="${pageContext.request.contextPath}/controller?command=pagination&page=${numberPage +1}">
+        <fmt:message key="page.button.next"/></a>
+        </li>
+        </c:if>
+        </ul>
+        </tr>
+        </table>
+        </form>
+</div>
+<form action="${pageContext.request.contextPath}/controller" method="post">
+    <div class="form-group">
+        <label class="control-label col-xs-3" for="opinionAboutEvent"><fmt:message key="label.opinionAboutEvent"/></label>
+        <input type="hidden" name="command" value ="add_message">
+        <input type="hidden" name="eventId" value ="${eventView.getEventId()}">
+         <input type="hidden" name="numberPage" value ="${numberPage}">
+        <div class="col-xs-9">
+        <textarea rows="8" class="form-control" id="eventMessage" name="eventMessage"></textarea>
+        </br>
+        <button type="submit" class=class="btn btn-danger"   name="add" value="${event.getEventId()}"><fmt:message key="button.add"/></button>
+<form>
+</div>
+</div>
 </div>
 <!-- FOOTER -->
 <footer class="footer">

@@ -32,18 +32,18 @@
               <p>${event.getShortDescription()}</p>
             </ul>
            <form action="${pageContext.request.contextPath}/controller" method="post">
-           <input type="hidden" name="command" value ="event_view">
-            <button type="submit" class="btn btn-lg btn-block btn-outline-primary" name="eventView" value="${event.getEventId()}"><fmt:message key="button.view"/></button>
+              <input type="hidden" name="command" value ="event_view">
+              <button type="submit" class="btn btn-lg btn-block btn-outline-primary" name="eventId" value="${event.getEventId()}"><fmt:message key="button.view"/></button>
             </form>
             </br>
+            <form action="${pageContext.request.contextPath}/controller"" method="post">
             <c:if test="${not empty authUser }">
                 <c:if test="${authUser.getRole()=='ADMIN'}">
-            <form action="${pageContext.request.contextPath}/controller" method="post">
-            <input type="hidden" name="command" value ="event_edit">
-            <button type="submit" class="btn btn-lg btn-block btn-outline-primary"  name="edit" value="${event.getEventId()}"><fmt:message key="button.edit"/></button>
-            <form>
-             </c:if>
-              </c:if>
+                    <input type="hidden" name="command" value ="event_edit">
+                    <button type="submit" class="btn btn-lg btn-block btn-outline-primary"  name="eventId" value="${event.getEventId()}"><fmt:message key="button.edit"/></button>
+                </c:if>
+            </c:if>
+            </form>
           </div>
         </div>
         </c:forEach>

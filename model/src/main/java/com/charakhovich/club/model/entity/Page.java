@@ -10,6 +10,7 @@ public class Page {
     }
 
     public int getFirst() {
+
         return (pageNumber - 1) * getMax();
     }
 
